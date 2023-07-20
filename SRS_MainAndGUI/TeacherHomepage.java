@@ -144,6 +144,7 @@ public class TeacherHomepage extends JFrame {
                 {
                     Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/OOProject", "root", "balaguer");
 
+                    var query = "INSERT INTO StudentProfile values('" + name1 + "'," + age + ",'" + course + "','" + contactno + "','" + address + "','" + bday + "','" + studentno + "','" + LocalDateTime.now() + "'," + grade1 + "," + grades2 + ")";
 
                     Statement sta = connection.createStatement();
                     int x = sta.executeUpdate(query);
