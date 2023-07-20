@@ -7,6 +7,8 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class TeacherHomepage extends JFrame {
     private JTable table;
@@ -50,27 +52,28 @@ public class TeacherHomepage extends JFrame {
          public void actionPerformed(ActionEvent e) {
                 // Prompt the user for input
                 String name = JOptionPane.showInputDialog("Enter Name:");
-                String age = JOptionPane.showInputDialog("Enter Age: ");
+                int age = Integer.parseInt(JOptionPane.showInputDialog("Enter Age: "));
                 String course = JOptionPane.showInputDialog("Enter Course, Year and Section:");
-                String contactno = JOptionPane.showInputDialog("Enter Contact no. :");
+                String contactno = (JOptionPane.showInputDialog("Enter Contact no. :"));
                 String address = JOptionPane.showInputDialog("Enter Address:");
                 String bday = JOptionPane.showInputDialog("Enter Date of Birthday:");
                 String studentno = JOptionPane.showInputDialog("Enter Student no. :");
-                String attendance = JOptionPane.showInputDialog("Enter Attendance:");
-                String grade1 = JOptionPane.showInputDialog("Enter Grade in 1st Sem:");
-                String grades2 = JOptionPane.showInputDialog("Enter Grade in 2nd Sem:");
+                //LocalDateTime attendance = LocalDateTime.parse(""+LocalDateTime.now(),DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                String attendance = ""+LocalDateTime.now();
+                float grade1 = Float.parseFloat(JOptionPane.showInputDialog("Enter Grade in 1st Sem:"));
+                float grades2 = Float.parseFloat(JOptionPane.showInputDialog("Enter Grade in 2nd Sem:"));
+                
                 String username = "" + name;
 
                 
                 // Add the data to the table
-                tableModel.addRow(new Object[]{name, age, course, contactno, address, bday, studentno, attendance, grade1, grades2});
+                tableModel.addRow(new Object[]{ name, age, course, contactno, address, bday, studentno, attendance, grade1, grades2});
                         
                 try 
                 {
                     Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/OOProject", "root", "balaguer");
 
-                    String query = "INSERT INTO StudentProfile values(" + name + "," + age + "," + course + "," +
-                    contactno + "," + address + "," + bday + "," + studentno + "," + attendance + "," + grade1 + "," + grades2 + ")";
+                    var query = "INSERT INTO StudentProfile values('" + name + "'," + age + ",'" + course + "','" + contactno + "','" + address + "','" + bday + "','" + studentno + "','" + LocalDateTime.now() + "'," + grade1 + "," + grades2 + ")";
 
                     Statement sta = connection.createStatement();
                     int x = sta.executeUpdate(query);
@@ -79,7 +82,7 @@ public class TeacherHomepage extends JFrame {
                     else 
                     {
                         JOptionPane.showMessageDialog(addButton, 
-                        "Welcome, " + username + "  Your account is sucessfully created");
+                        "Welcome, " + username + "  Your Profile is sucessfully created");
                     }
                     connection.close();
                 }
@@ -113,15 +116,18 @@ public class TeacherHomepage extends JFrame {
             if (selectedRow != -1) {
                 // Prompt the user for input
                 String name1 = JOptionPane.showInputDialog("Enter Name:");
-                String age = JOptionPane.showInputDialog("Enter Age: ");
+                int age = Integer.parseInt(JOptionPane.showInputDialog("Enter Age: "));
                 String course = JOptionPane.showInputDialog("Enter Course, Year and Section:");
-                String contactno = JOptionPane.showInputDialog("Enter Contact no. :");
+                String contactno = (JOptionPane.showInputDialog("Enter Contact no. :"));
                 String address = JOptionPane.showInputDialog("Enter Address:");
                 String bday = JOptionPane.showInputDialog("Enter Date of Birthday:");
                 String studentno = JOptionPane.showInputDialog("Enter Student no. :");
-                String attendance = JOptionPane.showInputDialog("Enter Attendance:");
-                String grade1 = JOptionPane.showInputDialog("Enter Grade in 1st Sem:");
-                String grades2 = JOptionPane.showInputDialog("Enter Grade in 2nd Sem:");
+                //LocalDateTime attendance = LocalDateTime.parse(""+LocalDateTime.now(),DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                String attendance = ""+LocalDateTime.now();
+                float grade1 = Float.parseFloat(JOptionPane.showInputDialog("Enter Grade in 1st Sem:"));
+                float grades2 = Float.parseFloat(JOptionPane.showInputDialog("Enter Grade in 2nd Sem:"));
+                
+                String username = "" + name1;
                 // Update the selected row with the new data
                 tableModel.setValueAt(name1, selectedRow, 0);
                 tableModel.setValueAt(age, selectedRow, 1);
@@ -133,6 +139,26 @@ public class TeacherHomepage extends JFrame {
                 tableModel.setValueAt(attendance, selectedRow, 7);
                 tableModel.setValueAt(grade1, selectedRow, 8);
                 tableModel.setValueAt(grades2, selectedRow, 9);
+                
+                try 
+                {
+                    Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/OOProject", "root", "balaguer");
+
+                    var query = "INSERT INTO StudentProfile values('" + name1 + "'," + age + ",'" + course + "','" + contactno + "','" + address + "','" + bday + "','" + studentno + "','" + LocalDateTime.now() + "'," + grade1 + "," + grades2 + ")";
+
+                    Statement sta = connection.createStatement();
+                    int x = sta.executeUpdate(query);
+                    if (x == 0) 
+                    {JOptionPane.showMessageDialog(addButton, "This is alredy exist");} 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(addButton, 
+                        "Welcome, " + username + "  Your Profile is sucessfully Updated");
+                    }
+                    connection.close();
+                }
+                catch (Exception exception) {}
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a row to update.");
             }
